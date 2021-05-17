@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  sbt:
+    image: mozilla/sbt
+    working_dir: "/app"
+    volumes:
+      - "./:/app"
+      # sbt caches
+      - "$HOME/.ivy2:/root/.ivy2"
+      - "$HOME/.sbt:/root/.sbt"
+      - "$HOME/.cache:/root/.cache"
