@@ -1,0 +1,26 @@
+sudo: false
+
+services:
+  - docker
+
+# Travis can cache content between builds. This speeds up the build process and saves resources.
+cache:
+  directories:
+    # Sbt caches
+    - $HOME/.ivy2
+    - $HOME/.sbt
+    - $HOME/.cache
+
+# Defines all jobs which Travis will run in parallel.
+jobs:
+  # With fast finishing enabled, Travis CI will mark your build as finished as soon as one of two
+  # conditions are met: The only remaining jobs are allowed to fail, or a job has already failed. In
+  # these cases, the status of the build can already be determined, so there’s no need to wait around
+  fast_finish: true
+
+branches:
+  only:
+    - main
+
+script:
+  - make test
