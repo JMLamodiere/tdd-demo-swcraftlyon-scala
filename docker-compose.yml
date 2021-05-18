@@ -9,4 +9,4 @@ services:
       # sbt caches
       - "$HOME/.ivy2:/root/.ivy2"
       - "$HOME/.sbt:/root/.sbt"
-      - "$HOME/.cache:/root/.cache"
+      - "$HOME/.cache/coursier:/root/.cache/coursier"
