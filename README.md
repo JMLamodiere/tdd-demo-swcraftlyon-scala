@@ -1,5 +1,7 @@
 # TDD Demo - Software Crafters Lyon 2021 - Scala
 
+[![Build Status](https://travis-ci.com/JMLamodiere/tdd-demo-swcraftlyon-scala.svg?branch=main)](https://travis-ci.com/JMLamodiere/tdd-demo-swcraftlyon-scala)
+
 # Makefile
 
 Run `make` or `make help` to see available commands.
