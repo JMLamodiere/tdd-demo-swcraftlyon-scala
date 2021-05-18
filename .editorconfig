@@ -16,7 +16,7 @@ indent_size = 2
 indent_size = 2
 
 [{*.yml,*.yaml}]
-indent_size = 4
+indent_size = 2
 
 [docs/**openapi.yml]
 indent_size = 2
@@ -27,7 +27,7 @@ indent_size = 2
 [*.json]
 indent_size = 4
 
-[{.travis.yml,package.json}]
+[package.json]
 # The indent size used in the `package.json` file cannot be changed
 # https://github.com/npm/npm/pull/3180#issuecomment-16336516
 indent_size = 2

@@ -1,6 +1,6 @@
 # TDD Demo - Software Crafters Lyon 2021 - Scala
 
-[![Build Status](https://travis-ci.com/JMLamodiere/tdd-demo-swcraftlyon-scala.svg?branch=main)](https://travis-ci.com/JMLamodiere/tdd-demo-swcraftlyon-scala)
+![Build Status](https://github.com/JMLamodiere/tdd-demo-swcraftlyon-scala/actions/workflows/ci.yml/badge.svg?branch=main)
 
 # Makefile
 
