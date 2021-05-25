@@ -23,7 +23,7 @@ class RegisterRunningSessionHandlerSpec
 
     "create a running session containing provided informations" in {
       //Given (Arrange)
-      val (handler, _) = createHandlerAndDependencies
+      val (handler, _, _) = createHandlerAndDependencies
 
       //When (Act)
       val resultF = handler.handle(
@@ -41,7 +41,7 @@ class RegisterRunningSessionHandlerSpec
 
     "use next available ID when creating a running session" in {
       //Given (Arrange)
-      val (handler, repository) = createHandlerAndDependencies
+      val (handler, repository, _) = createHandlerAndDependencies
       givenNextIdIs(repository, 12)
 
       //When (Act)
@@ -56,7 +56,7 @@ class RegisterRunningSessionHandlerSpec
 
     "store created running session" in {
       //Given (Arrange)
-      val (handler, repository) = createHandlerAndDependencies
+      val (handler, repository, _) = createHandlerAndDependencies
       givenNextIdIs(repository, 12)
 
       //When (Act)
@@ -76,14 +76,40 @@ class RegisterRunningSessionHandlerSpec
       )
       verify(repository).add(expectedRunningSession)
     }
+
+    "enrich running session with current temperature" in {
+      //Given (Arrange)
+      val (handler, _, weatherProvider) = createHandlerAndDependencies
+      givenCurrentCelsiusTemperatureIs(weatherProvider, 15.5)
+
+      //When (Act)
+      val resultF = handler.handle(
+        RegisterRunningSessionTestFactory.create()
+      )
+
+      //Then (Assert)
+      val result = Await.result(resultF, 5.second)
+      result.celsiusTemperature shouldBe 15.5
+    }
   }
 
-  private def createHandlerAndDependencies
-      : (RegisterRunningSessionHandler, RegisterRunningSessionRepository) = {
+  private def createHandlerAndDependencies: (
+      RegisterRunningSessionHandler,
+      RegisterRunningSessionRepository,
+      WeatherProvider
+  ) = {
     val repository = mock[RegisterRunningSessionRepository]
     givenNextIdExists(repository)
     givenAddSucceeds(repository)
-    (new RegisterRunningSessionHandler(repository), repository)
+
+    val weatherProvider = mock[WeatherProvider]
+    givenCurrentCelsiusTemperatureExists(weatherProvider)
+
+    (
+      new RegisterRunningSessionHandler(repository, weatherProvider),
+      repository,
+      weatherProvider
+    )
   }
 
   private def givenNextIdIs(
@@ -103,4 +129,17 @@ class RegisterRunningSessionHandlerSpec
     when(repository.add(any[RunningSession])(any[ExecutionContext]))
       .thenReturn(Future.successful(()))
   }
+
+  private def givenCurrentCelsiusTemperatureIs(
+      weatherProvider: WeatherProvider,
+      temperature: Double
+  ) = {
+    when(weatherProvider.getCurrentCelsiusTemperature())
+      .thenReturn(Future.successful(temperature))
+  }
+
+  private def givenCurrentCelsiusTemperatureExists(
+      weatherProvider: WeatherProvider
+  ): Unit =
+    givenCurrentCelsiusTemperatureIs(weatherProvider, 99.9)
 }
