@@ -1,20 +1,25 @@
 package net.jmlamo.tdd_demo_swcraftlyon.application.command
 
-import net.jmlamo.tdd_demo_swcraftlyon.domain.RunningSession
+import net.jmlamo.tdd_demo_swcraftlyon.domain.{
+  RegisterRunningSessionRepository,
+  RunningSession
+}
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class RegisterRunningSessionHandler {
+class RegisterRunningSessionHandler(
+    repository: RegisterRunningSessionRepository
+) {
   def handle(command: RegisterRunningSession)(implicit
       ec: ExecutionContext
   ): Future[RunningSession] = {
-    Future.successful(
-      RunningSession(
-        command.distance,
-        command.shoes
-      )
+
+    for {
+      id <- repository.nextId()
+    } yield RunningSession(
+      id,
+      command.distance,
+      command.shoes
     )
-
   }
-
 }
