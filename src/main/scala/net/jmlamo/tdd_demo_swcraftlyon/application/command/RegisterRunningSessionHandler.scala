@@ -16,10 +16,12 @@ class RegisterRunningSessionHandler(
 
     for {
       id <- repository.nextId()
-    } yield RunningSession(
-      id,
-      command.distance,
-      command.shoes
-    )
+      runningSession = RunningSession(
+        id,
+        command.distance,
+        command.shoes
+      )
+      _ <- repository.add(runningSession)
+    } yield runningSession
   }
 }
