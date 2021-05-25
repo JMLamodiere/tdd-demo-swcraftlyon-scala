@@ -4,7 +4,7 @@ import org.scalatest._
 import wordspec._
 import matchers._
 import net.jmlamo.tdd_demo_swcraftlyon.domain.{
-  RegisterRunningSessionRepository,
+  RunningSessionRepository,
   RunningSession,
   WeatherProvider
 }
@@ -98,10 +98,10 @@ class RegisterRunningSessionHandlerSpec
 
   private def createHandlerAndDependencies: (
       RegisterRunningSessionHandler,
-      RegisterRunningSessionRepository,
+      RunningSessionRepository,
       WeatherProvider
   ) = {
-    val repository = mock[RegisterRunningSessionRepository]
+    val repository = mock[RunningSessionRepository]
     givenNextIdExists(repository)
     givenAddSucceeds(repository)
 
@@ -116,7 +116,7 @@ class RegisterRunningSessionHandlerSpec
   }
 
   private def givenNextIdIs(
-      repository: RegisterRunningSessionRepository,
+      repository: RunningSessionRepository,
       id: Int
   ): Unit = {
     when(repository.nextId())
@@ -124,11 +124,11 @@ class RegisterRunningSessionHandlerSpec
   }
 
   private def givenNextIdExists(
-      repository: RegisterRunningSessionRepository
+      repository: RunningSessionRepository
   ): Unit =
     givenNextIdIs(repository, 999)
 
-  private def givenAddSucceeds(repository: RegisterRunningSessionRepository) = {
+  private def givenAddSucceeds(repository: RunningSessionRepository) = {
     when(repository.add(any[RunningSession])(any[ExecutionContext]))
       .thenReturn(Future.successful(()))
   }
