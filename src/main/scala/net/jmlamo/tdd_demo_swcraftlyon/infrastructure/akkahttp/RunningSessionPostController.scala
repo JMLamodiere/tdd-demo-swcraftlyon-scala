@@ -1,6 +1,5 @@
 package net.jmlamo.tdd_demo_swcraftlyon.infrastructure.akkahttp
 
-import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import net.jmlamo.tdd_demo_swcraftlyon.application.command.{
@@ -19,12 +18,7 @@ class RunningSessionPostController(handler: RegisterRunningSessionHandler)(
       entity(as[RegisterRunningSession]) { command =>
         complete(
           201,
-          for {
-            _ <- handler.handle(command)
-          } yield HttpEntity(
-            ContentTypes.`application/json`,
-            """todo"""
-          )
+          handler.handle(command)
         )
       }
     }
