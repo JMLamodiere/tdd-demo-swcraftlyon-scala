@@ -16,7 +16,11 @@ help: ## Show Help
 
 # Test / CI environment. Require docker and docker-compose executables
 
-test:test-unit ## Run all tests
+test:test-static ## Run all tests
+test:test-dynamic
 
-test-unit: ## Run unit tests
+test-static: ## Run static tests
+	docker-compose run --rm sbt sbt scalafmtCheckAll
+
+test-dynamic: ## Run dynamic tests
 	docker-compose run --rm sbt sbt test
