@@ -1,4 +1,4 @@
-val scala3Version = "3.0.0"
+val scala213Version = "2.13.6"
 
 lazy val root = project
   .in(file("."))
@@ -7,7 +7,10 @@ lazy val root = project
     name := "tdd-demo-swcraftlyon",
     version := "0.1.0",
 
-    scalaVersion := scala3Version,
+    scalaVersion := scala213Version,
 
-    libraryDependencies += "com.novocode" % "junit-interface" % "0.11" % "test"
+    libraryDependencies ++= Seq(
+      "org.scalatest" %% "scalatest" % "3.2.9" % Test,
+      "org.mockito" %% "mockito-scala" % "1.16.37" % Test
+    )
   )
