@@ -3,15 +3,30 @@ package net.jmlamo.tdd_demo_swcraftlyon.infrastructure.akkahttp
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import net.jmlamo.tdd_demo_swcraftlyon.application.command.{
+  RegisterRunningSession,
+  RegisterRunningSessionHandler
+}
 
-import net.jmlamo.tdd_demo_swcraftlyon.application.command.RegisterRunningSessionHandler
+import scala.concurrent.ExecutionContext
 
-class RunningSessionPostController(handler: RegisterRunningSessionHandler) {
+class RunningSessionPostController(handler: RegisterRunningSessionHandler)(
+    implicit val ec: ExecutionContext
+) extends JsonSupport {
 
-  lazy val route: Route =
-    path("hello") {
-      get {
-        complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, handler.handle))
+  lazy val route: Route = path("runningsessions") {
+    post {
+      entity(as[RegisterRunningSession]) { command =>
+        complete(
+          201,
+          for {
+            _ <- handler.handle(command)
+          } yield HttpEntity(
+            ContentTypes.`application/json`,
+            """todo"""
+          )
+        )
       }
     }
+  }
 }

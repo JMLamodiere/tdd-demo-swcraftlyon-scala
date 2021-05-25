@@ -14,6 +14,7 @@ lazy val root = project
       "com.typesafe.akka" %% "akka-stream" % AkkaVersion,
       "com.typesafe.akka" %% "akka-slf4j" % AkkaVersion,
       "com.typesafe.akka" %% "akka-http" % AkkaHttpVersion,
+      "com.typesafe.akka" %% "akka-http-spray-json" % AkkaHttpVersion,
       "ch.qos.logback" % "logback-classic" % "1.2.3",
       "org.scalatest" %% "scalatest" % "3.2.9" % Test,
       "org.mockito" %% "mockito-scala" % "1.16.37" % Test,
