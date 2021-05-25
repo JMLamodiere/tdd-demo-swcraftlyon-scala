@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: TDD Demo Software Crafters Lyon 2021
+  description: |
+    See [JMLamodiere/tdd-demo-swcraftlyon-scala](https://github.com/JMLamodiere/tdd-demo-swcraftlyon-scala/blob/main/README.md) on GitHub.
+
+    To call [SwaggerHub API Auto Mocking](https://app.swaggerhub.com/help/integrations/api-auto-mocking) urls,
+    choose `virtserver.swaggerhub.com` in `Servers` list
+
+  version: 1.0.0
+
+# See https://swagger.io/docs/specification/paths-and-operations/
+paths:
+  /runningsessions:
+
+    post:
+      summary: Register a running session
+      tags: [ Running Session ]
+      requestBody:
+        required: true
+        description: Temperature is enriched by a weather provider
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRunningSession'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunningSession'
+
+# See https://swagger.io/docs/specification/components/
+components:
+
+  # See https://swagger.io/docs/specification/data-models/
+  # NB : they appear in the generated doc
+  schemas:
+
+    PostRunningSession:
+      type: object
+      required: [ distance, shoes ]
+      properties:
+        distance:
+          type: number
+          format: float
+          example: 5.5
+        shoes:
+          type: string
+          example: 'Adadis Turbo2'
+
+    RunningSession:
+      allOf:
+        # Inherit PutRunningSession
+        - $ref: '#/components/schemas/PostRunningSession'
+      required: [ id, temperatureCelcius ]
+      properties:
+        id:
+          type: integer
+          minimum: 1
+          example: 42
+        temperatureCelcius:
+          type: number
+          format: float
+          example: 37.2
+
+# See https://swagger.io/docs/specification/api-host-and-base-path/
+servers:
+  - url: 'http://localhost:8000'
+    description: dev
+
+  # See https://app.swaggerhub.com/help/integrations/api-auto-mocking
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/JMLamodiere/tdd-demo-swcraftlyon-2021/1.0.0

@@ -2,6 +2,10 @@
 
 ![Build Status](https://github.com/JMLamodiere/tdd-demo-swcraftlyon-scala/actions/workflows/ci.yml/badge.svg?branch=main)
 
+Live coding examples used during [Software Crafters Lyon Meetup may 2021](https://www.meetup.com/fr-FR/Software-Craftsmanship-Lyon/events/277307036/):
+
+For a bit of theory, see [:fr: De CRUD à DDD, comment Meetic a sauvé son legacy](https://afup.org/talks/3037-de-crud-a-ddd-comment-meetic-a-sauve-son-legacy)
+
 # Makefile
 
 Run `make` or `make help` to see available commands.
@@ -16,3 +20,13 @@ Pre-requisites :
 Run tests with:
 
     make test
+
+## API documentation
+
+- Local : [docs/openapi.yml](docs/openapi.yml)
+- Swaggger Hub (with [SwaggerHub API Auto Mocking](https://app.swaggerhub.com/help/integrations/api-auto-mocking)
+  activated) : https://app.swaggerhub.com/apis/JMLamodiere/tdd-demo-swcraftlyon-2021/1.0.0
+
+Example :
+
+    curl -i -X POST "https://virtserver.swaggerhub.com/JMLamodiere/tdd-demo-swcraftlyon-2021/1.0.0/runningsessions" -H  "accept: application/json" -H  "Content-Type: application/json" -d "{\"distance\":5.5,\"shoes\":\"Adadis Turbo2\"}"
