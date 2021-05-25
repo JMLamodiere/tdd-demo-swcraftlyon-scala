@@ -5,7 +5,8 @@ import wordspec._
 import matchers._
 import net.jmlamo.tdd_demo_swcraftlyon.domain.{
   RegisterRunningSessionRepository,
-  RunningSession
+  RunningSession,
+  WeatherProvider
 }
 import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
@@ -56,8 +57,9 @@ class RegisterRunningSessionHandlerSpec
 
     "store created running session" in {
       //Given (Arrange)
-      val (handler, repository, _) = createHandlerAndDependencies
+      val (handler, repository, weatherProvider) = createHandlerAndDependencies
       givenNextIdIs(repository, 12)
+      givenCurrentCelsiusTemperatureIs(weatherProvider, 15.5)
 
       //When (Act)
       val resultF = handler.handle(
@@ -72,7 +74,8 @@ class RegisterRunningSessionHandlerSpec
       val expectedRunningSession = RunningSession(
         12,
         125.7,
-        "shoes"
+        "shoes",
+        15.5
       )
       verify(repository).add(expectedRunningSession)
     }
