@@ -3,24 +3,27 @@ package net.jmlamo.tdd_demo_swcraftlyon.application.command
 import org.scalatest._
 import wordspec._
 import matchers._
-import net.jmlamo.tdd_demo_swcraftlyon.domain.RegisterRunningSessionRepository
-import org.mockito.MockitoSugar
+import net.jmlamo.tdd_demo_swcraftlyon.domain.{
+  RegisterRunningSessionRepository,
+  RunningSession
+}
+import org.mockito.{ArgumentMatchersSugar, MockitoSugar}
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits.global
 
 class RegisterRunningSessionHandlerSpec
     extends AnyWordSpec
     with should.Matchers
-    with MockitoSugar {
+    with MockitoSugar
+    with ArgumentMatchersSugar {
 
   "a RegisterRunningSessionHandler" should {
 
     "create a running session containing provided informations" in {
       //Given (Arrange)
-      val (handler, repository) = createHandlerAndDependencies
-      givenNextIdExists(repository)
+      val (handler, _) = createHandlerAndDependencies
 
       //When (Act)
       val resultF = handler.handle(
@@ -39,7 +42,7 @@ class RegisterRunningSessionHandlerSpec
     "use next available ID when creating a running session" in {
       //Given (Arrange)
       val (handler, repository) = createHandlerAndDependencies
-      when(repository.nextId).thenReturn(Future.successful(12))
+      givenNextIdIs(repository, 12)
 
       //When (Act)
       val resultF = handler.handle(
@@ -50,18 +53,54 @@ class RegisterRunningSessionHandlerSpec
       val result = Await.result(resultF, 5.second)
       result.id shouldBe 12
     }
+
+    "store created running session" in {
+      //Given (Arrange)
+      val (handler, repository) = createHandlerAndDependencies
+      givenNextIdIs(repository, 12)
+
+      //When (Act)
+      val resultF = handler.handle(
+        RegisterRunningSessionTestFactory.create(
+          125.7,
+          "shoes"
+        )
+      )
+
+      //Then (Assert)
+      Await.result(resultF, 5.second)
+      val expectedRunningSession = RunningSession(
+        12,
+        125.7,
+        "shoes"
+      )
+      verify(repository).add(expectedRunningSession)
+    }
   }
 
   private def createHandlerAndDependencies
       : (RegisterRunningSessionHandler, RegisterRunningSessionRepository) = {
     val repository = mock[RegisterRunningSessionRepository]
+    givenNextIdExists(repository)
+    givenAddSucceeds(repository)
     (new RegisterRunningSessionHandler(repository), repository)
+  }
+
+  private def givenNextIdIs(
+      repository: RegisterRunningSessionRepository,
+      id: Int
+  ): Unit = {
+    when(repository.nextId())
+      .thenReturn(Future.successful(id))
   }
 
   private def givenNextIdExists(
       repository: RegisterRunningSessionRepository
-  ): Unit = {
-    when(repository.nextId())
-      .thenReturn(Future.successful(999))
+  ): Unit =
+    givenNextIdIs(repository, 999)
+
+  private def givenAddSucceeds(repository: RegisterRunningSessionRepository) = {
+    when(repository.add(any[RunningSession])(any[ExecutionContext]))
+      .thenReturn(Future.successful(()))
   }
 }
