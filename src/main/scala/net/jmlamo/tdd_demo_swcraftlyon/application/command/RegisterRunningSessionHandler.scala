@@ -1,7 +1,7 @@
 package net.jmlamo.tdd_demo_swcraftlyon.application.command
 
 import net.jmlamo.tdd_demo_swcraftlyon.domain.{
-  RegisterRunningSessionRepository,
+  RunningSessionRepository,
   RunningSession,
   WeatherProvider
 }
@@ -9,7 +9,7 @@ import net.jmlamo.tdd_demo_swcraftlyon.domain.{
 import scala.concurrent.{ExecutionContext, Future}
 
 class RegisterRunningSessionHandler(
-    repository: RegisterRunningSessionRepository,
+    repository: RunningSessionRepository,
     weatherProvider: WeatherProvider
 ) {
   def handle(command: RegisterRunningSession)(implicit
