@@ -54,16 +54,17 @@ components:
       allOf:
         # Inherit PutRunningSession
         - $ref: '#/components/schemas/PostRunningSession'
-      required: [ id, temperatureCelcius ]
-      properties:
-        id:
-          type: integer
-          minimum: 1
-          example: 42
-        temperatureCelcius:
-          type: number
-          format: float
-          example: 37.2
+        - type: object
+          required: [ id, celsiusTemperature ]
+          properties:
+            id:
+              type: integer
+              minimum: 1
+              example: 42
+            celsiusTemperature:
+              type: number
+              format: float
+              example: 37.2
 
 # See https://swagger.io/docs/specification/api-host-and-base-path/
 servers:
